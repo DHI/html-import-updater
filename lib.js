@@ -123,3 +123,78 @@ export async function parser({ fileList, search, replace, excludePatterns } = {}
     throw error(name, `There was a problem parsing one or more files ${JSON.stringify(files)}`)
   }
 }
+
+
+/**
+ * Replaces contents in a file.
+ *
+ * @param {object} options
+ * @param {string} options.path File path to replace lines in.
+ * @param {object[]} options.lines A list of lines to replace.
+ * @param {string} options.lines[].line Original line (to replace).
+ * @param {string} options.lines[].suggestion New line (will replace original).
+ */
+export async function replacer ({ path, lines }) {
+  const name = 'Replacer'
+  const _replaceLines = (content, lineArray) => {
+    const output = `${content}`
+    lineArray.forEach((l) => output.replace(l.line, l.suggestion))
+
+    console.log(output, lineArray)
+    return output
+  }
+
+  if (!path) {
+    return Promise.reject(error(name, `File path to replace is required.`))
+  }
+
+  if (!lines || !Array.isArray(lines)) {
+    console.error(`Lines failed ${JSON.stringify(lines)}`)
+    return Promise.reject(error(name, `Lines to replace cannot be empty and must be a valid array`))
+  }
+
+  const file = await readFile(path, { encoding: 'utf8'})
+  return _replaceLines(file, lines)
+}
+
+/**
+ * Outputs content to a file.
+ *
+ * @param {object} options
+ * @param {*} options.content The content to output.
+ * @param {string} options.outputFile File path to output to.
+ */
+export async function outputer({ content, outputFile } = {}) {
+  const name = 'Outputer'
+
+  const _outputMessage = (result, path, message) => {
+    const icon = result === 'success' ? '✅ ' : '⚠ '
+
+    return {
+      result,
+      message: `${icon} ${message} to ${path}`
+    }
+  }
+
+  if (!outputFile) {
+    return Promise.reject(error(name, `Output file is required.`))
+  }
+
+  if (!content) {
+    return _outputMessage('warning', outputFile, 'Did nothing, because there was nothing to output')
+  }
+
+  if (!isJSON(content)){
+    console.error(`Content that failed: ${JSON.stringify(content)}`)
+    return Promise.reject(error(name, `Invalid content provided to ${outputFile}`))
+  }
+
+  try {
+    await writeFile(outputFile, JSON.stringify(content))
+  } catch (e) {
+    console.error(e)
+    return Promise.reject(error(name, `Failed to write to ${outputFile}`))
+  }
+
+  return _outputMessage('success', outputFile, 'Outputed content')
+}

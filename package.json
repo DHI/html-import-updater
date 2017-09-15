@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node ./node_modules/.bin/ava",
     "dev": "node ./node_modules/.bin/ava --watch",
-    "demo": "node ./node_modules/.bin/babel-node -- index.js --cwd test-assets",
+    "demo": "node ./node_modules/.bin/babel-node -- index.js --cwd test-assets/examples",
     "transpile": "node ./node_modules/.bin/babel *.js -d dist",
     "publish:windows": "npm run transpile && node ./node_modules/.bin/pkg . -t node8-win --out-path package",
     "publish:all": "npm run transpile && node ./node_modules/.bin/pkg . --out-path package"
@@ -57,8 +57,7 @@
     "fs-readfile-promise": "^3.0.0",
     "fs-writefile-promise": "^2.0.0",
     "globby": "^6.1.0",
-    "is-valid-json": "^1.0.2",
-    "json-format": "^1.0.1",
+    "inquirer": "^3.2.3",
     "lodash": "^4.17.4"
   },
   "bin": "./dist/index.js",
