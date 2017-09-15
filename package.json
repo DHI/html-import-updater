@@ -1,0 +1,68 @@
+{
+  "name": "html-import-updater",
+  "version": "1.0.0",
+  "description": "Reads HTML files and updates their script, style or import src/href according to your settings.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./node_modules/.bin/ava",
+    "dev": "node ./node_modules/.bin/ava --watch",
+    "demo": "node ./node_modules/.bin/babel-node -- index.js --cwd test-assets",
+    "transpile": "node ./node_modules/.bin/babel *.js -d dist",
+    "publish:windows": "npm run transpile && node ./node_modules/.bin/pkg . -t node8-win --out-path package",
+    "publish:all": "npm run transpile && node ./node_modules/.bin/pkg . --out-path package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danmindru/bower-consolidator.git"
+  },
+  "keywords": [
+    "bower",
+    "consolidator"
+  ],
+  "author": "Dan Mindru",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danmindru/bower-consolidator/issues"
+  },
+  "homepage": "https://github.com/danmindru/bower-consolidator#readme",
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "del": "^3.0.0",
+    "pkg": "^4.2.4"
+  },
+  "ava": {
+    "failFast": true,
+    "files": [
+      "test/**/*.js"
+    ],
+    "source": [
+      "index.js"
+    ],
+    "require": [
+      "babel-core/register",
+      "babel-polyfill"
+    ],
+    "babel": "inherit"
+  },
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "fs-readfile-promise": "^3.0.0",
+    "fs-writefile-promise": "^2.0.0",
+    "globby": "^6.1.0",
+    "is-valid-json": "^1.0.2",
+    "json-format": "^1.0.1",
+    "lodash": "^4.17.4"
+  },
+  "bin": "./dist/index.js",
+  "pkg": {
+    "scripts": "./dist/**/*"
+  }
+}
