@@ -53,6 +53,9 @@ export function reader({ workingDir, excludePaths } = {}) {
  * @param {string} replace Will replace search.
  * @param {array} excludePatterns A list of patterns that shouldn't be matched.
  */
+
+// TODO: exclude patterns
+// TODO: consider nested refs
 export async function parser({ fileList, search, replace, excludePatterns } = {}) {
   const name = 'Parser'
   const _readFiles = (paths) => {
@@ -137,10 +140,13 @@ export async function parser({ fileList, search, replace, excludePatterns } = {}
 export async function replacer ({ path, lines }) {
   const name = 'Replacer'
   const _replaceLines = (content, lineArray) => {
-    const output = `${content}`
-    lineArray.forEach((l) => output.replace(l.line, l.suggestion))
+    let output = `${content}`
 
-    console.log(output, lineArray)
+    lineArray.forEach((l) => {
+      const lineRegExp = new RegExp(l.line, 'g')
+      output = output.replace(lineRegExp, l.suggestion)
+    })
+
     return output
   }
 

@@ -49,19 +49,20 @@ const pathsAndLines = {
   imports: {
     path: filesAndMatches.imports.expect.path,
     lines: filesAndMatches.imports.expect.matches,
-    expect: filesAndMatches.imports.expect.matches[0].suggestion
   },
   scripts: {
     path: filesAndMatches.scripts.expect.path,
     lines: filesAndMatches.scripts.expect.matches,
-    expect: filesAndMatches.scripts.expect.matches[0].suggestion
   },
   links: {
     path: filesAndMatches.links.expect.path,
     lines: filesAndMatches.links.expect.matches,
-    expect: filesAndMatches.links.expect.matches[0].suggestion
   }
 }
+
+/**
+ * TODO clear /replaced dir before each
+ */
 
 /**
  * Reader tests.
@@ -120,9 +121,13 @@ test('replacer should replace lines in a path', async (t) => {
     lines: pathsAndLines.links.lines
   })
 
-  t.deepEqual(replaced1, [pathsAndLines.imports.expect])
-  t.deepEqual(replaced2, [pathsAndLines.scripts.expect])
-  t.deepEqual(replaced3, [pathsAndLines.links.expect])
+  const expectedImportsFile = await readFile('test-assets/expects/simple/import.html', { encoding: 'utf-8' })
+  const expectedScriptsFile = await readFile('test-assets/expects/simple/script.html', { encoding: 'utf-8' })
+  const expectedLinksFile = await readFile('test-assets/expects/simple/link.html', { encoding: 'utf-8' })
+
+  t.deepEqual(replaced1, expectedImportsFile)
+  t.deepEqual(replaced2, expectedScriptsFile)
+  t.deepEqual(replaced3, expectedLinksFile)
 })
 
 

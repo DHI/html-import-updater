@@ -4,9 +4,9 @@
   "description": "Reads HTML files and updates their script, style or import src/href according to your settings.",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/.bin/ava",
-    "dev": "node ./node_modules/.bin/ava --watch",
-    "demo": "node ./node_modules/.bin/babel-node -- index.js --cwd test-assets/examples",
+    "test": "ava || node ./node_modules/.bin/ava",
+    "dev": "ava --watch || node ./node_modules/.bin/ava --watch",
+    "demo": "babel-node -- index.js --cwd test-assets/examples --out replaced || node ./node_modules/.bin/babel-node -- index.js --cwd test-assets/examples --out replaced",
     "transpile": "node ./node_modules/.bin/babel *.js -d dist",
     "publish:windows": "npm run transpile && node ./node_modules/.bin/pkg . -t node8-win --out-path package",
     "publish:all": "npm run transpile && node ./node_modules/.bin/pkg . --out-path package"
