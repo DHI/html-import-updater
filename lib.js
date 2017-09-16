@@ -53,10 +53,9 @@ export function reader({ workingDir, excludePaths } = {}) {
  * @param {string} replace Will replace search.
  * @param {array} excludePatterns A list of patterns that shouldn't be matched.
  */
-
+// TODO: worth splitting this up.
 // TODO: exclude patterns
-// TODO: consider nested refs
-export async function parser({ fileList, search, replace, excludePatterns } = {}) {
+export async function parser({ workingDir, fileList, search, replace, excludePatterns } = {}) {
   const name = 'Parser'
   const _readFiles = (paths) => {
     return Promise.all(
@@ -69,6 +68,33 @@ export async function parser({ fileList, search, replace, excludePatterns } = {}
     )
   }
 
+  const _getFilePathDepth = (files, prefix) => {
+    return files.map((file) => {
+      const depth = file.path.split('/').length
+
+      return {
+        ...file,
+        depth
+      }
+    })
+  }
+
+  const _adjustPathForDepth = (depth, lowestDepth, stringToAdjust) => {
+    if (depth > lowestDepth) {
+      let difference = depth - lowestDepth
+      let formattedString = stringToAdjust
+
+      while (difference) {
+        formattedString = `../${formattedString}`
+        difference--
+      }
+
+      return formattedString
+    } else {
+      return stringToAdjust
+    }
+  }
+
   if (!fileList) {
     return Promise.reject(error(name, 'Please provide a fileList to parse.'))
   }
@@ -77,12 +103,21 @@ export async function parser({ fileList, search, replace, excludePatterns } = {}
     return Promise.reject(error(name, 'Filelist should be an array.'))
   }
 
-  const files = await _readFiles(fileList)
+  const files = _getFilePathDepth(await _readFiles(fileList), workingDir)
 
   try {
+    const lowestDepth = files.reduce((acc, { depth }) => {
+      if (depth < acc) {
+        return depth
+      }
+
+      return acc
+    }, Infinity)
+
     const results = files
       .map((file) => {
-        // 1. Get all matches
+        // 1. Get all matches.
+        // Regex finds all lines that have a string that contains link or script.
         const allRegExp = /<(link|script).*>/g
         let matches = []
         let match = allRegExp.exec(file.content)
@@ -96,17 +131,41 @@ export async function parser({ fileList, search, replace, excludePatterns } = {}
           match = allRegExp.exec(file.content)
         }
 
-        // 2. Filter by search, if provided
-        if (search) {
+        /**
+         * 2. Adjust search & replace strings.
+         * Each match is compared against the lowest depth in the provided filelist.
+         * If a file has a depth bigger than that, we append `../` according to the depth difference to the search string. This way we deal with nested matches.
+         */
+        const adjustedSearch = _adjustPathForDepth(file.depth, lowestDepth, search)
+        const adjustedReplace = _adjustPathForDepth(file.depth, lowestDepth, replace)
+
+        // 3. Filter by search, if provided
+        if (adjustedSearch) {
           matches = matches.filter((m) => {
-            const searchRegExp = new RegExp(`(href|src)="(${search}[a-zA-Z].*)"`, 'g')
+            /* Regex finds all lines that have a href or src that contain the search word in it, followed by a letter.
+             *
+             * Example for *search = '../'*
+             * ===================================
+             * Run against:
+             * 1. <script src="lib/file.js"
+             * 2. <script src="../lib/file.js"
+             * 3. <script src="../../lib/file.js"
+             * -----------------------------------
+             * Matches 2.:
+             * <script src="  ~../~  lib/file.js"
+             */
+            const searchRegExp = new RegExp(`(href|src)="(${adjustedSearch}[a-zA-Z].*)"`, 'g')
             return searchRegExp.exec(m.full)
           })
         }
 
-        // 3. Format matches
+        // 4. Format matches
         matches = matches.map((m) => {
-          const suggestion = m.full.replace(search, replace)
+          const lastIndex = m.full.lastIndexOf(adjustedSearch)
+          const suggestion =
+            m.full.substring(0, lastIndex) +
+            adjustedReplace +
+            m.full.substring(lastIndex + adjustedSearch.length)
 
           return {
             line: m.full,

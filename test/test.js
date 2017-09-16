@@ -25,9 +25,9 @@ const allAssetPaths = [
 
 const filesAndMatches = {
   imports: {
-    filelist: ['test-assets/examples/simple/import.html'],
+    filelist: [`${workingDir}/simple/import.html`],
     expect: {
-      path: 'test-assets/examples/simple/import.html',
+      path: `${workingDir}/simple/import.html`,
       matches: [
         {
           line: `<link rel="import" href="../iron-component-page/iron-component-page.html">`,
@@ -37,9 +37,9 @@ const filesAndMatches = {
     }
   },
   scripts: {
-    filelist: ['test-assets/examples/simple/script.html'],
+    filelist: [`${workingDir}/simple/script.html`],
     expect: {
-      path: 'test-assets/examples/simple/script.html',
+      path: `${workingDir}/simple/script.html`,
       matches: [
         {
           line: `<script src="../test-address.js"></script>`,
@@ -49,9 +49,9 @@ const filesAndMatches = {
     }
   },
   links: {
-    filelist: ['test-assets/examples/simple/link.html'],
+    filelist: [`${workingDir}/simple/link.html`],
     expect: {
-      path: 'test-assets/examples/simple/link.html',
+      path: `${workingDir}/simple/link.html`,
       matches: [
         {
           line: `<link href="../test-address.css" rel="stylesheet" />`,
@@ -59,6 +59,37 @@ const filesAndMatches = {
         }
       ]
     }
+  },
+  nested: {
+    filelist: [`${workingDir}/test-nested/index.html`, `${workingDir}/test-nested/nest/index.html`],
+    expect: [
+      {
+        path: `${workingDir}/test-nested/index.html`,
+        matches: [
+          {
+            line: `<script src="../webcomponentsjs/webcomponents-lite.js"></script>`,
+            suggestion: `<script src="../lib/webcomponentsjs/webcomponents-lite.js"></script>`
+          },
+          {
+            line: `<link rel="import" href="../iron-component-page/iron-component-page.html">`,
+            suggestion: `<link rel="import" href="../lib/iron-component-page/iron-component-page.html">`
+          }
+        ]
+      },
+      {
+        path: `${workingDir}/test-nested/nest/index.html`,
+        matches: [
+          {
+            line: `<script src="../../webcomponentsjs/webcomponents-lite.js"></script>`,
+            suggestion: `<script src="../../lib/webcomponentsjs/webcomponents-lite.js"></script>`
+          },
+          {
+            line: `<link rel="import" href="../../iron-component-page/iron-component-page.html">`,
+            suggestion: `<link rel="import" href="../../lib/iron-component-page/iron-component-page.html">`
+          }
+        ]
+      },
+    ]
   }
 }
 
@@ -78,9 +109,11 @@ const pathsAndLines = {
 }
 
 /**
- * TODO clear /replaced dir before each
+ * Clean output files before each test.
  */
-
+test.beforeEach('clean up output', async () => {
+    await del(['replaced'])
+})
 
  /**
   *  Reader tests.
@@ -140,7 +173,7 @@ const pathsAndLines = {
 /**
  * Parser tests.
  */
- // TODO: more tests!
+// TODO: better test coverage.
 test('parser should return correct import matches', async (t) => {
     t.plan(3)
 
@@ -165,6 +198,18 @@ test('parser should return correct import matches', async (t) => {
     t.deepEqual(matches1, [filesAndMatches.imports.expect])
     t.deepEqual(matches2, [filesAndMatches.scripts.expect])
     t.deepEqual(matches3, [filesAndMatches.links.expect])
+})
+
+test('parser should handle nested refs correctly', async (t) => {
+  t.plan(1)
+
+  const matches = await parser({
+    fileList: filesAndMatches.nested.filelist,
+    search: '../',
+    replace: '../lib/'
+  })
+
+  t.deepEqual(matches, filesAndMatches.nested.expect)
 })
 
 /**
