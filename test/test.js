@@ -1,11 +1,28 @@
 import test from 'ava'
 import del from 'del'
 import readFile from 'fs-readfile-promise'
-import { parser, replacer } from '../lib'
+import { reader, parser, replacer } from '../lib'
 
 /**
  * Setup.
  */
+const workingDir = 'test-assets/examples'
+
+const nonTestAssetPaths = [
+  `${workingDir}/simple/import.html`,
+  `${workingDir}/simple/link.html`,
+  `${workingDir}/simple/script.html`,
+]
+
+const allAssetPaths = [
+  ...nonTestAssetPaths,
+  `${workingDir}/test-address/test-address.html`,
+  `${workingDir}/test-map/index.html`,
+  `${workingDir}/test-map/test-map.html`,
+  `${workingDir}/test-nested/index.html`,
+  `${workingDir}/test-nested/nest/index.html`
+]
+
 const filesAndMatches = {
   imports: {
     filelist: ['test-assets/examples/simple/import.html'],
@@ -64,10 +81,61 @@ const pathsAndLines = {
  * TODO clear /replaced dir before each
  */
 
-/**
- * Reader tests.
- */
-// TODO
+
+ /**
+  *  Reader tests.
+  */
+ test('reader should fail if no workingDir provided', async (t) => {
+     t.plan(2)
+
+     const paths = await t.throws(reader())
+     t.is(paths.message, '💥  Reader Panic! Please provide a workingDirectory.')
+ })
+
+ test('reader should succeed if workingDir provided', async (t) => {
+     t.plan(1)
+
+     const paths = await reader({ workingDir: workingDir })
+     t.truthy(paths)
+ })
+
+ test('reader should return an array of paths for workingDir', async (t) => {
+     t.plan(1)
+
+     const paths = await reader({ workingDir: workingDir })
+     t.deepEqual(paths, allAssetPaths)
+ })
+
+ test('reader should fail if exclude glob not an array', async (t) => {
+     t.plan(2)
+
+     const paths = await t.throws(reader({ workingDir: workingDir, excludePaths: 'test-*' }))
+     t.is(paths.message, '💥  Reader Panic! Excludes should be an array of strings, like ["glob/to/exclude"]')
+ })
+
+ test('reader should return a filtered array for workingDir if exclude glob provided', async (t) => {
+     t.plan(1)
+
+     const paths = await reader({ workingDir: workingDir, excludePaths: ['test-*'] })
+     t.deepEqual(paths, nonTestAssetPaths)
+ })
+
+ test('reader should parse exclude glob array strings', async (t) => {
+     t.plan(2)
+
+     const paths = await reader({ workingDir: workingDir, excludePaths: "['test-*']" })
+     const paths1 = await reader({ workingDir: workingDir, excludePaths: '["test-*"]' }) // Different quotes
+
+     t.deepEqual(paths, nonTestAssetPaths)
+     t.deepEqual(paths1, nonTestAssetPaths)
+ })
+
+ test('reader should filter by multiple exclude globs', async (t) => {
+     t.plan(1)
+
+     const paths = await reader({ workingDir: workingDir, excludePaths: ['test-*', 'sim*'] })
+     t.deepEqual(paths, [])
+ })
 
 /**
  * Parser tests.
