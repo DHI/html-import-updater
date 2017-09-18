@@ -1,7 +1,7 @@
 import test from 'ava'
 import del from 'del'
 import readFile from 'fs-readfile-promise'
-import { reader, parser, replacer } from '../lib'
+import { reader, parser, replacer, outputer } from '../lib'
 
 /**
  * Setup.
@@ -309,14 +309,29 @@ test('replacer should replace lines in a path', async (t) => {
 /**
  * Outputer tests.
  */
-// TODO (use expects in test-assets)
+test('outputer should fail with no output file', async (t) => {
+  t.plan(2)
 
+  const output = await t.throws(outputer({ content: ''}))
 
-// ...other tests
-// look for *.html
-// should work for js|html|css
-// href & src
-// allow module prefix
-// some paths can be nested; should handle relative paths
-// only ../ (and lower) should work; scan cwd and if files exist don't touch
-// exlude ../../js ; ../../css
+  t.deepEqual(output.message, '💥  Outputer Panic! Output file is required.')
+})
+
+test('outputer should do nothing without content', async (t) => {
+  t.plan(1)
+
+  const output = await outputer({ outputFile: 'replaced/file.txt' })
+  t.deepEqual(output, {
+      result: 'warning', message: '⚠  Did nothing, because there was nothing to output to replaced/file.txt' })
+})
+
+test('outputer should write content to an output file', async (t) => {
+  t.plan(2)
+
+  const output = await outputer({ content: 'hi there', outputFile: 'replaced/file.txt' })
+
+  const expectedFile = await readFile('replaced/file.txt', { encoding: 'utf-8' })
+
+  t.is(output.message, '✅  Outputed content to replaced/file.txt')
+  t.deepEqual('hi there', expectedFile)
+})

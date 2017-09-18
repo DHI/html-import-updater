@@ -2,6 +2,7 @@ import _ from 'lodash'
 import globby from 'globby'
 import readFile from 'fs-readfile-promise'
 import writeFile from 'fs-writefile-promise'
+import mkdirp from 'mkdirp-promise'
 
 const error = (componentName, errorMessage) => new Error(`💥  ${componentName} Panic! ${errorMessage}`)
 
@@ -275,15 +276,11 @@ export async function outputer({ content, outputFile } = {}) {
     return _outputMessage('warning', outputFile, 'Did nothing, because there was nothing to output')
   }
 
-  if (!isJSON(content)){
-    console.error(`Content that failed: ${JSON.stringify(content)}`)
-    return Promise.reject(error(name, `Invalid content provided to ${outputFile}`))
-  }
-
   try {
-    await writeFile(outputFile, JSON.stringify(content))
+    await mkdirp(outputFile.substring(0, outputFile.lastIndexOf('/')))
+    await writeFile(outputFile, content)
   } catch (e) {
-    console.error(e)
+    console.error('heeey=============>', e)
     return Promise.reject(error(name, `Failed to write to ${outputFile}`))
   }
 
