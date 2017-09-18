@@ -90,6 +90,42 @@ const filesAndMatches = {
         ]
       },
     ]
+  },
+  exclude: {
+    filelist: [`${workingDir}/test-nested/index.html`, `${workingDir}/test-nested/nest/index.html`],
+    expect: [
+      {
+        path: `${workingDir}/test-nested/index.html`,
+        matches: [
+          {
+            line: `<script src="../webcomponentsjs/webcomponents-lite.js"></script>`,
+            suggestion: `<script src="../lib/webcomponentsjs/webcomponents-lite.js"></script>`
+          }
+        ]
+      },
+      {
+        path: `${workingDir}/test-nested/nest/index.html`,
+        matches: [
+          {
+            line: `<script src="../../webcomponentsjs/webcomponents-lite.js"></script>`,
+            suggestion: `<script src="../../lib/webcomponentsjs/webcomponents-lite.js"></script>`
+          }
+        ]
+      },
+    ],
+  },
+  multiExclude: {
+    filelist: [`${workingDir}/test-nested/index.html`, `${workingDir}/test-nested/nest/index.html`],
+    expect: [
+      {
+        path: `${workingDir}/test-nested/index.html`,
+        matches: []
+      },
+      {
+        path: `${workingDir}/test-nested/nest/index.html`,
+        matches: []
+      },
+    ],
   }
 }
 
@@ -210,6 +246,32 @@ test('parser should handle nested refs correctly', async (t) => {
   })
 
   t.deepEqual(matches, filesAndMatches.nested.expect)
+})
+
+test('parser should exclude if paths provided', async (t) => {
+  t.plan(1)
+
+  const matches = await parser({
+    fileList: filesAndMatches.exclude.filelist,
+    search: '../',
+    replace: '../lib/',
+    excludePatterns: ['iron-.*']
+  })
+
+  t.deepEqual(matches, filesAndMatches.exclude.expect)
+})
+
+test('parser should exclude multiple paths', async (t) => {
+  t.plan(1)
+
+  const matches = await parser({
+    fileList: filesAndMatches.multiExclude.filelist,
+    search: '../',
+    replace: '../lib/',
+    excludePatterns: ['iron-.*', 'web']
+  })
+
+  t.deepEqual(matches, filesAndMatches.multiExclude.expect)
 })
 
 /**
