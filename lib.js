@@ -51,7 +51,7 @@ export function reader({ workingDir, excludePaths } = {}) {
  * @param {array} fileList
  * @param {string} search The path to replace.
  * @param {string} replace Will replace search.
- * @param {array} excludePatterns A list of patterns that shouldn't be matched.
+ * @param {array} excludePatterns A list of regular expression that shouldn't be matched by the parser.
  */
 // TODO: worth splitting this up.
 // TODO: exclude patterns
@@ -95,6 +95,19 @@ export async function parser({ workingDir, fileList, search, replace, excludePat
     }
   }
 
+  if (excludePatterns && !Array.isArray(excludePatterns)) {
+    // TODO: make this fool-proof
+    let parseExcludeAsString
+
+    try {
+      parseExcludeAsString = JSON.parse(excludePatterns.replace(/'/g, '"'))
+    } catch (e) {
+      return Promise.reject(error(name, 'Exclude patterns should be an array of strings, like ["regex1", "regex2"]'))
+    }
+
+    excludePatterns = parseExcludeAsString
+  }
+
   if (!fileList) {
     return Promise.reject(error(name, 'Please provide a fileList to parse.'))
   }
@@ -132,14 +145,27 @@ export async function parser({ workingDir, fileList, search, replace, excludePat
         }
 
         /**
-         * 2. Adjust search & replace strings.
+         * 2. Exclude patterns if provided.
+         */
+        if (excludePatterns) {
+          matches = matches.filter((m) => {
+            const excludeRegExps = excludePatterns.map((exclude) => new RegExp(exclude, 'g'))
+
+            return excludeRegExps.reduce((acc, cur) => {
+              return acc && !cur.exec(m.full)
+            }, true)
+          })
+        }
+
+        /**
+         * 3. Adjust search & replace strings.
          * Each match is compared against the lowest depth in the provided filelist.
          * If a file has a depth bigger than that, we append `../` according to the depth difference to the search string. This way we deal with nested matches.
          */
         const adjustedSearch = _adjustPathForDepth(file.depth, lowestDepth, search)
         const adjustedReplace = _adjustPathForDepth(file.depth, lowestDepth, replace)
 
-        // 3. Filter by search, if provided
+        // 4. Filter by search, if provided
         if (adjustedSearch) {
           matches = matches.filter((m) => {
             /* Regex finds all lines that have a href or src that contain the search word in it, followed by a letter.
@@ -159,7 +185,7 @@ export async function parser({ workingDir, fileList, search, replace, excludePat
           })
         }
 
-        // 4. Format matches
+        // 5. Format matches to line + suggestion objects.
         matches = matches.map((m) => {
           const lastIndex = m.full.lastIndexOf(adjustedSearch)
           const suggestion =
