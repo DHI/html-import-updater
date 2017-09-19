@@ -15,7 +15,7 @@ program
   .option('--e, --excludePaths [excludePaths]', 'One or many paths (or globs) you want to exclude, i.e. `-e "prefix-*"`. Can be applied multiple times: `-e "one" -e "two"`.', collectExcludePaths)
   .option('--o, --outputDir <outputDir>', 'The output directory.')
   .option('--s, --search <search>', 'The string you want to search for, i.e. "../"')
-  .option('--r, --replace <replace>', 'The string you want to replace each occurence of the search string with.')
+  .option('--r, --replace <replace>', 'The string you want to replace each occurrence of the search string with.')
   .option('--ep, --excludePatterns <excludePatterns>', 'One or many regular expressions that you want to exclude from each matched search item, i.e. `-ep "iron.*"`. Can be applied multiple times: `-ep "one" -ep "two"`.', collectExcludePatterns)
   .parse(process.argv)
 
@@ -139,7 +139,7 @@ Lines:
 ----------------------------------------
 ✅  aaaaaand done.
 
-Replaced ${colors.blue(acceptedWithMatches.length)} occurences of ${colors.red(search)} with ${colors.green(replace)}.`)
+Replaced ${colors.blue(acceptedWithMatches.length)} occurrences of ${colors.red(search)} with ${colors.green(replace)}.`)
       })
   }
 
