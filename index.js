@@ -110,7 +110,7 @@ ${colors.green(`+ ${r.suggestion}`)} \n \n`,
       .all(
         acceptedWithMatches
           .map(async (item) => {
-            const fullPath = path.join(outputDir, item.path)
+            const fullPath = outputDir ? path.join(outputDir, item.path) : item.path
             const content = await replacer({
               path: item.path,
               lines: item.matches
@@ -135,12 +135,19 @@ Lines:
           })
         }
 
+
+        const totalReplaced = acceptedWithMatches.reduce((acc, cur) => {
+            acc += cur.matches.length
+            return acc
+        }, 0)
+
         console.log(`
 ----------------------------------------
 ✅  aaaaaand done.
 
-Replaced ${colors.blue(acceptedWithMatches.length)} occurrences of ${colors.red(search)} with ${colors.green(replace)}.`)
+Replaced ${colors.blue(totalReplaced)} occurrences of ${colors.red(search)} with ${colors.green(replace)}.`)
       })
+      .catch((e) => console.error(`💥 Failed misserably. \n`, e))
   }
 
   return inquirer
