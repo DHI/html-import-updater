@@ -49,13 +49,14 @@ export function reader({ workingDir, excludePaths } = {}) {
 /**
  * Parses html files provided as a file list and returns a list containing path and matches.
  *
- * @param {array} fileList
- * @param {string} search The path to replace.
- * @param {string} replace Will replace search.
- * @param {array} excludePatterns A list of regular expression that shouldn't be matched by the parser.
+ * @param {object} options
+ * @param {string} options.workingDir
+ * @param {array} options.fileList
+ * @param {string} options.search The path to replace.
+ * @param {string} options.replace Will replace search.
+ * @param {array} options.excludePatterns A list of regular expression that shouldn't be matched by the parser.
  */
 // TODO: worth splitting this up.
-// TODO: exclude patterns
 export async function parser({ workingDir, fileList, search, replace, excludePatterns } = {}) {
   const name = 'Parser'
   const _readFiles = (paths) => {
@@ -280,7 +281,6 @@ export async function outputer({ content, outputFile } = {}) {
     await mkdirp(outputFile.substring(0, outputFile.lastIndexOf('/')))
     await writeFile(outputFile, content)
   } catch (e) {
-    console.error('heeey=============>', e)
     return Promise.reject(error(name, `Failed to write to ${outputFile}`))
   }
 
