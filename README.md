@@ -36,24 +36,23 @@ PowerShell ./html-import-updater.exe [options]
 ```bash
 Usage: index [options]
 
+Options:
 
- Options:
-
-   -V, --version             output the version number
-   --cwd, --workingDir       Current working directory (where your files
-                             are).
-   --e, --excludePaths       One or many paths (or globs) you want to
-                             exclude, i.e. `-e "prefix-*"`. Can be
-                             applied multiple times: `-e "one" -e "two"`.
-   --o, --outputDir          The output directory.
-   --s, --search             The string you want to search for, i.e. "../"
-   --r, --replace            The string you want to replace each     
-                             occurrence of the search string with.
-   --ep, --excludePatterns   One or many regular expressions that you
-                             want to exclude from each matched search
-                             item, i.e. `-ep "iron.*"`. Can be applied
-                             multiple times: `-ep "one" -ep "two"`.
-   -h, --help                output usage information
+  -V, --version             output the version number
+  --cwd, --workingDir       Current working directory (where your files
+                            are).
+  --e, --excludePaths       One or many paths (or globs) you want to
+                            exclude, i.e. `-e "prefix-*"`. Can be
+                            applied multiple times: `-e "one" -e "two"`.
+  --o, --outputDir          The output directory.
+  --s, --search             The string you want to search for, i.e. "../"
+  --r, --replace            The string you want to replace each     
+                            occurrence of the search string with.
+  --ep, --excludePatterns   One or many regular expressions that you
+                            want to exclude from each matched search
+                            item, i.e. `-ep "iron.*"`. Can be applied
+                            multiple times: `-ep "one" -ep "two"`.
+  -h, --help                output usage information
 ```
 
 ## Developing
@@ -77,10 +76,10 @@ npm run demo # outputs consolidated packages to ./custom.bower.json
 #### Testing
 ```bash
 yarn
-npm dev # continuous tests, watches files for changes
+npm run dev # continuous tests, watches files for changes
 ```
 
 #### Run tests once
 ```bash
-npm test
+npm run test
 ```
