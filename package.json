@@ -1,6 +1,6 @@
 {
   "name": "html-import-updater",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reads HTML files and updates their script, style or import src/href according to your settings.",
   "main": "index.js",
   "scripts": {
