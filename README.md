@@ -1,6 +1,8 @@
 # HTML import updater
 A cli tool that reads HTML files and updates their script, style or import 'src' or 'href' according to your settings.
 
+![html-import-updater](https://user-images.githubusercontent.com/1515742/31330377-7588674e-acde-11e7-94a9-40f73e7d1441.gif)
+
 ##### What is this for?
 ✅ Polymer projects that change the location of their 3rd party libs<br/>
 ✅ Polymer projects that move to npm <br/>
@@ -20,7 +22,7 @@ node ./index.js [options]
 ## Usage (packaged)
 To package the app, run
 ```bash
-npm run publish:all
+npm run publish:all # creates binaries in ./package
 ```
 
 ### Windows
@@ -70,7 +72,7 @@ babel-node index.js [options]
 
 #### Run a demo
 ```bash
-npm run demo # outputs consolidated packages to ./custom.bower.json
+npm run demo # outputs files with replaced locations to ./replaced
 ```
 
 #### Testing
