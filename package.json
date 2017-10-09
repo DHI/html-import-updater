@@ -13,18 +13,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danmindru/bower-consolidator.git"
+    "url": "git+https://github.com/danmindru/html-import-updater.git"
   },
   "keywords": [
-    "bower",
-    "consolidator"
+    "html",
+    "import",
+    "updater",
+    "polymer",
+    "cli",
+    "cli-tool",
+    "polymer-updater",
+    "bower-migration",
+    "npm-tool"
   ],
   "author": "Dan Mindru",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/danmindru/bower-consolidator/issues"
+    "url": "https://github.com/danmindru/html-import-updater/issues"
   },
-  "homepage": "https://github.com/danmindru/bower-consolidator#readme",
+  "homepage": "https://github.com/danmindru/html-import-updater#readme",
   "devDependencies": {
     "ava": "^0.22.0",
     "del": "^3.0.0",
