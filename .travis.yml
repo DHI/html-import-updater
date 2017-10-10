@@ -11,6 +11,16 @@ matrix:
 addons:
   artifacts: true
 
+addons:
+  artifacts:
+    debug: true
+    paths:
+      - ./package
+    target_paths: $TRAVIS_BUILD_NUMBER
+    bucket: html-importer
+    s3_region: 	eu-central-1
+
+
 before_install:
   - npm install -g yarn
 
