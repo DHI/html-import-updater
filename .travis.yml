@@ -7,10 +7,9 @@ matrix:
   include:
     - os: linux
       node_js: 8.5.0
-      
+
 addons:
-  artifacts:
-     working_dir: packages
+  artifacts: true
 
 before_install:
   - npm install -g yarn
