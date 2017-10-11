@@ -9,16 +9,6 @@ A cli tool that reads HTML files and updates their script, style or import 'src'
 ✅ Any project that has a bunch of HTML imports that need to be bulk-updated <br/>
 ✅ Works with nested HTML imports and can exclude paths
 
-
-## Usage (unpackaged, as a node app)
-You can run this tool as a node app or packaged executable.
-
-```bash
-yarn add html-import-updater # or npm install html-import-updater
-node ./index.js [options]
-```
-
-
 ## Usage (packaged)
 Download the latest binary release for your OS on [the release page](https://github.com/danmindru/html-import-updater/releases).
 
@@ -28,6 +18,20 @@ Available builds: linux, macos, windows
 To package the app yourself (essentially create the binaries mentioned aboves), run
 ```bash
 npm run publish:all # creates binaries in ./package
+```
+
+## Usage (unpackaged, as a node app)
+You can run this tool as a node app or packaged executable.
+
+```bash
+yarn add html-import-updater # or npm install html-import-updater
+cd node_modules/html-import-updater
+node ./index.js [options]
+```
+
+```bash
+# or clone repo and run
+node ./index.js [options]
 ```
 
 ### Windows
