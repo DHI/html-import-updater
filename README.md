@@ -13,6 +13,7 @@ A cli tool that reads HTML files and updates their script, style or import 'src'
 Download the latest binary release for your OS on [the release page](https://github.com/danmindru/html-import-updater/releases).
 
 Available builds: linux, macos, windows
+
 -------------------------------------------------------------------
 
 To package the app yourself (essentially create the binaries mentioned aboves), run
