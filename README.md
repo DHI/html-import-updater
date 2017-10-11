@@ -20,7 +20,12 @@ node ./index.js [options]
 
 
 ## Usage (packaged)
-To package the app, run
+Download the latest binary release for your OS on [the release page](https://github.com/danmindru/html-import-updater/releases).
+
+Available builds: linux, macos, windows
+-------------------------------------------------------------------
+
+To package the app yourself (essentially create the binaries mentioned aboves), run
 ```bash
 npm run publish:all # creates binaries in ./package
 ```
