@@ -3,6 +3,8 @@ A cli tool that reads HTML files and updates their script, style or import 'src'
 
 ![html-import-updater](https://user-images.githubusercontent.com/1515742/31330377-7588674e-acde-11e7-94a9-40f73e7d1441.gif)
 
+### [Download latest binaries 📀](https://github.com/danmindru/html-import-updater/releases/latest)
+
 ##### What is this for?
 ✅ Polymer projects that change the location of their 3rd party libs<br/>
 ✅ Polymer projects that move to npm <br/>
