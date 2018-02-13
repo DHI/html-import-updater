@@ -1,4 +1,6 @@
 # HTML import updater
+[![NPM version][npm-img]][npm-link] 
+
 A cli tool that reads HTML files and updates their script, style or import 'src' or 'href' according to your settings.
 
 ![html-import-updater](https://user-images.githubusercontent.com/1515742/31330377-7588674e-acde-11e7-94a9-40f73e7d1441.gif)
@@ -99,3 +101,5 @@ npm run dev # continuous tests, watches files for changes
 ```bash
 npm run test
 ```
+
+[npm-link]: https://npmjs.org/package/html-import-updater
