@@ -102,4 +102,6 @@ npm run dev # continuous tests, watches files for changes
 npm run test
 ```
 
+
+[npm-img]: https://badge.fury.io/js/html-import-updater.svg
 [npm-link]: https://npmjs.org/package/html-import-updater
