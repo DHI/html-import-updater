@@ -3,7 +3,7 @@ A cli tool that reads HTML files and updates their script, style or import 'src'
 
 ![html-import-updater](https://user-images.githubusercontent.com/1515742/31330377-7588674e-acde-11e7-94a9-40f73e7d1441.gif)
 
-### [Download latest binaries 📀](https://github.com/danmindru/html-import-updater/releases/latest)
+### [Download latest binaries 📀](https://github.com/DHI/html-import-updater/releases/latest)
 
 ##### What is this for?
 ✅ Polymer projects that change the location of their 3rd party libs<br/>
@@ -12,7 +12,7 @@ A cli tool that reads HTML files and updates their script, style or import 'src'
 ✅ Works with nested HTML imports and can exclude paths
 
 ## Usage (packaged)
-Download the latest binary release for your OS on [the release page](https://github.com/danmindru/html-import-updater/releases).
+Download the latest binary release for your OS on [the release page](https://github.com/DHI/html-import-updater/releases).
 
 Available builds: linux, macos, windows
 
@@ -70,6 +70,8 @@ Options:
 ```
 
 ## Developing
+The development enviornment has only been used on a macOS & Unix enviornment. Use on Windows at your own risk. The executables from releases (above) should work fine.
+
 Install dependencies
 ```bash
 yarn

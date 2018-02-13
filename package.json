@@ -1,6 +1,6 @@
 {
   "name": "html-import-updater",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Reads HTML files and updates their script, style or import src/href according to your settings.",
   "main": "index.js",
   "scripts": {
@@ -13,27 +13,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danmindru/html-import-updater.git"
+    "url": "git+https://github.com/DHI/html-import-updater.git"
   },
   "keywords": [
     "html",
     "import",
     "updater",
-    "polymer",
     "cli",
     "cli-tool",
     "polymer-updater",
     "bower-migration",
-    "npm-tool"
+    "npm-tool",
+    "script",
+    "polymer",
+    "bower",
+    "web-components"
   ],
   "author": "Dan Mindru",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/danmindru/html-import-updater/issues"
+    "url": "https://github.com/DHI/html-import-updater/issues"
   },
-  "homepage": "https://github.com/danmindru/html-import-updater#readme",
+  "homepage": "https://github.com/DHI/html-import-updater#readme",
   "devDependencies": {
-    "ava": "^0.22.0",
+    "ava": "^0.25.0",
     "del": "^3.0.0",
     "pkg": "^4.2.4"
   },
