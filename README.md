@@ -20,7 +20,7 @@ Available builds: linux, macos, windows
 
 -------------------------------------------------------------------
 
-To package the app yourself (essentially create the binaries mentioned aboves), run
+To package the app yourself (essentially create the binaries mentioned above), run
 ```bash
 npm run publish:all # creates binaries in ./package
 ```
